@@ -3,6 +3,14 @@ import os
 import glob
 import time
 
+def remove_excessive_line_breaks(content):
+    # Split the content into lines
+    lines = content.splitlines()
+    # Remove empty lines and strip leading/trailing whitespace
+    cleaned_lines = [line.strip() for line in lines if line.strip()]
+    # Join the cleaned lines with a single newline
+    return "\n".join(cleaned_lines)
+
 def concatenate_files(folder, extension):
     # Ensure .out directory exists
     if not os.path.exists(".out"):
@@ -20,15 +28,20 @@ def concatenate_files(folder, extension):
     try:
         with open(output_filename, 'w') as outfile:
             # Write a header with the folder and extension
-            outfile.write(f"# Concatenated files with extension {extension} in folder {folder} at {time.ctime()}\n\n")
+            outfile.write(f"# Concatenated files with extension {extension} in folder {folder} time: {time.ctime()}\n\n")
 
             file_count = 0
             for filepath in glob.iglob(f"{folder}/**/*{extension}", recursive=True):
                 if os.path.getsize(filepath) > 0:  # Skip empty files
                     try:
                         with open(filepath, 'r') as infile:
-                            outfile.write(infile.read())
-                            outfile.write("\n")  # Optional newline between files
+                            content = infile.read()
+                            if extension == ".java":
+                                content = remove_excessive_line_breaks(content)
+                            # Add comment with file name
+                            outfile.write(f"# Filename: {os.path.basename(filepath)}\n")
+                            outfile.write(content)
+                            outfile.write("\n")  # Add a newline between files
                             file_count += 1
                     except Exception as e:
                         print(f"Error reading file {filepath}: {e}")
