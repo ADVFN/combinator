@@ -30,7 +30,7 @@ python3 combinator.py <folder> <extension>
 Example:
 
 ```sh
-python3 combinator.py ../livechat/ ".java"
+python3 combinator.py ../folder_name/ ".java"
 ```
 
 ### Verbose Mode
@@ -44,7 +44,7 @@ python3 combinator.py <folder> <extension> -v
 Example:
 
 ```sh
-python3 combinator.py ../livechat/ ".java" -v
+python3 combinator.py ../folder_name/ ".java" -v
 ```
 
 ## Output
@@ -76,13 +76,13 @@ This function handles the main logic of concatenating files:
 If the script is run with the following command:
 
 ```sh
-python3 combinator.py ../livechat/ ".java"
+python3 combinator.py ../folder_name/ ".java"
 ```
 
-The output file will be named something like `.out/_home_user_livechat_concatenated.txt` and include:
+The output file will be named something like `.out/_home_user_folder_name_concatenated.txt` and include:
 
 ```
-# Concatenated files with extension .java in folder /home/user/livechat time: Wed Jun 30 14:15:22 2024
+# Concatenated files with extension .java in folder /home/user/folder_name time: Wed Jun 30 14:15:22 2024
 
 # Filename: Example1.java
 <contents of Example1.java>
