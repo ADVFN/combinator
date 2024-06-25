@@ -44,7 +44,7 @@ def concatenate_files(folder, pattern, verbose=False):
     folder_display = folder.replace("/", "_").replace(".", "_")
 
     # Create an appropriate output filename based on the pattern
-    output_filename = f"out/{folder_display}_concatenated_{pattern.replace('*', 'all')}.txt"
+    output_filename = f"out/{folder_display}_concatenated_{pattern.replace('*', '-').replace('.', '_')}.txt"
 
     try:
         with open(output_filename, 'w') as outfile:
