@@ -2,6 +2,7 @@ import argparse
 import os
 import time
 import fnmatch
+import re
 
 # List of common library folders to ignore
 IGNORE_FOLDERS = {
@@ -22,13 +23,13 @@ IGNORE_FOLDERS = {
 # List of file extensions for which unnecessary whitespace should be removed
 REMOVE_WHITESPACE_EXTENSIONS = {".java", ".ts", ".tsx", ".js", ".jsx", ".c", ".cpp", ".cs", ".go", ".php"}
 
-def remove_excessive_line_breaks(content):
+def remove_excessive_whitespace(content):
     # Split the content into lines
     lines = content.splitlines()
-    # Remove empty lines and strip leading/trailing whitespace
-    cleaned_lines = [line.strip() for line in lines if line.strip()]
+    # Remove empty lines and strip leading/trailing whitespace, replace multiple spaces with single space
+    cleaned_lines = [re.sub(r'\s+', ' ', line.strip()) for line in lines if line.strip()]
     # Join the cleaned lines with a single newline
-    return "\n".join(cleaned_lines)
+    return " ".join(cleaned_lines)
 
 def should_ignore_folder(folder_path):
     return any(ignore_folder in folder_path for ignore_folder in IGNORE_FOLDERS)
@@ -66,7 +67,7 @@ def concatenate_files(folder, pattern, verbose=False):
                                 with open(filepath, 'r') as infile:
                                     content = infile.read()
                                     if any(filename.endswith(ext) for ext in REMOVE_WHITESPACE_EXTENSIONS):
-                                        content = remove_excessive_line_breaks(content)
+                                        content = remove_excessive_whitespace(content)
                                     # Add comment with file name
                                     outfile.write(f"# Filename: {filename}\n")
                                     outfile.write(content)
