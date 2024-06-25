@@ -19,6 +19,9 @@ IGNORE_FOLDERS = {
     "bin", "obj"     # C#/C++ build output
 }
 
+# List of file extensions for which unnecessary whitespace should be removed
+REMOVE_WHITESPACE_EXTENSIONS = {".java", ".ts", ".tsx", ".js", ".jsx", ".c", ".cpp", ".cs", ".go", ".php"}
+
 def remove_excessive_line_breaks(content):
     # Split the content into lines
     lines = content.splitlines()
@@ -62,7 +65,7 @@ def concatenate_files(folder, pattern, verbose=False):
                             try:
                                 with open(filepath, 'r') as infile:
                                     content = infile.read()
-                                    if pattern == "*.java":
+                                    if any(filename.endswith(ext) for ext in REMOVE_WHITESPACE_EXTENSIONS):
                                         content = remove_excessive_line_breaks(content)
                                     # Add comment with file name
                                     outfile.write(f"# Filename: {filename}\n")
