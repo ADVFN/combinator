@@ -22,7 +22,7 @@ IGNORE_FOLDERS = {
 }
 
 # List of file extensions for which unnecessary whitespace should be removed
-REMOVE_WHITESPACE_EXTENSIONS = {".java", ".ts", ".tsx", ".js", ".jsx", ".json", ".c", ".cpp", ".cs", ".go", ".php"}
+REMOVE_WHITESPACE_EXTENSIONS = {".java", ".ts", ".tsx", ".js", ".jsx", ".json", ".c", ".cpp", ".cs", ".go", ".php", ".sql", ".xml"}
 
 def remove_excessive_whitespace(content):
     # Split the content into lines
