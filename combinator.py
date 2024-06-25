@@ -11,11 +11,12 @@ def remove_excessive_line_breaks(content):
     # Join the cleaned lines with a single newline
     return "\n".join(cleaned_lines)
 
-def concatenate_files(folder, extension):
+def concatenate_files(folder, extension, verbose=False):
     # Ensure .out directory exists
     if not os.path.exists(".out"):
         os.makedirs(".out")
-        print("Created .out folder")
+        if verbose:
+            print("Created .out folder")
 
     # Get the absolute path of the folder
     folder = os.path.abspath(folder)
@@ -43,10 +44,13 @@ def concatenate_files(folder, extension):
                             outfile.write(content)
                             outfile.write("\n")  # Add a newline between files
                             file_count += 1
+                            if verbose:
+                                print(f"Concatenated: {filepath}")
                     except Exception as e:
                         print(f"Error reading file {filepath}: {e}")
                 else:
-                    print(f"Skipping empty file: {filepath}")
+                    if verbose:
+                        print(f"Skipping empty file: {filepath}")
 
             print(f"Concatenation complete. {file_count} files were concatenated into {output_filename}")
     except Exception as e:
@@ -56,9 +60,10 @@ def main():
     parser = argparse.ArgumentParser(description="Concatenate all files with a given extension in a directory recursively.")
     parser.add_argument('folder', type=str, help="Folder to search for files")
     parser.add_argument('extension', type=str, help="File extension to look for (e.g., .txt)")
+    parser.add_argument('-v', '--verbose', action='store_true', help="Enable verbose output")
 
     args = parser.parse_args()
-    concatenate_files(args.folder, args.extension)
+    concatenate_files(args.folder, args.extension, args.verbose)
 
 if __name__ == "__main__":
     main()
