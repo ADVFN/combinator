@@ -31,11 +31,11 @@ def should_ignore_folder(folder_path):
     return any(ignore_folder in folder_path for ignore_folder in IGNORE_FOLDERS)
 
 def concatenate_files(folder, pattern, verbose=False):
-    # Ensure .out directory exists
-    if not os.path.exists(".out"):
-        os.makedirs(".out")
+    # Ensure out directory exists
+    if not os.path.exists("out"):
+        os.makedirs("out")
         if verbose:
-            print("Created .out folder")
+            print("Created out folder")
 
     # Get the absolute path of the folder
     folder = os.path.abspath(folder)
@@ -44,7 +44,7 @@ def concatenate_files(folder, pattern, verbose=False):
     folder_display = folder.replace("/", "_").replace(".", "_")
 
     # Create an appropriate output filename based on the pattern
-    output_filename = f".out/{folder_display}_concatenated_{pattern.replace('*', 'all')}.txt"
+    output_filename = f"out/{folder_display}_concatenated_{pattern.replace('*', 'all')}.txt"
 
     try:
         with open(output_filename, 'w') as outfile:
