@@ -1,6 +1,7 @@
 import argparse
 import os
 import time
+import fnmatch
 
 # List of common library folders to ignore
 IGNORE_FOLDERS = {
@@ -29,7 +30,7 @@ def remove_excessive_line_breaks(content):
 def should_ignore_folder(folder_path):
     return any(ignore_folder in folder_path for ignore_folder in IGNORE_FOLDERS)
 
-def concatenate_files(folder, extension, verbose=False):
+def concatenate_files(folder, pattern, verbose=False):
     # Ensure .out directory exists
     if not os.path.exists(".out"):
         os.makedirs(".out")
@@ -42,25 +43,26 @@ def concatenate_files(folder, extension, verbose=False):
     # Replace / and . in the folder name to avoid issues with the output filename
     folder_display = folder.replace("/", "_").replace(".", "_")
 
-    output_filename = f".out/{folder_display}_concatenated_{extension.lstrip('.')}.txt"
+    # Create an appropriate output filename based on the pattern
+    output_filename = f".out/{folder_display}_concatenated_{pattern.replace('*', 'all')}.txt"
 
     try:
         with open(output_filename, 'w') as outfile:
-            # Write a header with the folder and extension
-            outfile.write(f"# Concatenated files with extension {extension} in folder {folder} time: {time.ctime()}\n\n")
+            # Write a header with the folder and pattern
+            outfile.write(f"# Concatenated files with pattern {pattern} in folder {folder} time: {time.ctime()}\n\n")
 
             file_count = 0
             for root, dirs, files in os.walk(folder):
                 # Remove ignored directories from the search
                 dirs[:] = [d for d in dirs if not should_ignore_folder(os.path.join(root, d))]
                 for filename in files:
-                    if filename.endswith(extension):
+                    if fnmatch.fnmatch(filename, pattern):
                         filepath = os.path.join(root, filename)
                         if os.path.getsize(filepath) > 0:  # Skip empty files
                             try:
                                 with open(filepath, 'r') as infile:
                                     content = infile.read()
-                                    if extension == ".java":
+                                    if pattern == "*.java":
                                         content = remove_excessive_line_breaks(content)
                                     # Add comment with file name
                                     outfile.write(f"# Filename: {filename}\n")
@@ -80,13 +82,13 @@ def concatenate_files(folder, extension, verbose=False):
         print(f"Error writing to output file {output_filename}: {e}")
 
 def main():
-    parser = argparse.ArgumentParser(description="Concatenate all files with a given extension in a directory recursively.")
+    parser = argparse.ArgumentParser(description="Concatenate all files with a given extension pattern in a directory recursively.")
     parser.add_argument('folder', type=str, help="Folder to search for files")
-    parser.add_argument('extension', type=str, help="File extension to look for (e.g., .txt)")
+    parser.add_argument('pattern', type=str, help="File pattern to look for (e.g., *.txt, *.ts*)")
     parser.add_argument('-v', '--verbose', action='store_true', help="Enable verbose output")
 
     args = parser.parse_args()
-    concatenate_files(args.folder, args.extension, args.verbose)
+    concatenate_files(args.folder, args.pattern, args.verbose)
 
 if __name__ == "__main__":
     main()
