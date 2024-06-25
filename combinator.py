@@ -16,7 +16,7 @@ IGNORE_FOLDERS = {
     ".vscode",       # Visual Studio Code project data
     "env",           # Another common Python virtual environment name
     "Pods",          # CocoaPods folder for iOS projects
-    "DerivedData",   # Xcode derived data,
+    "DerivedData",   # Xcode derived data
     ".next",         # Next.js build output
     "bin", "obj"     # C#/C++ build output
 }
@@ -35,7 +35,7 @@ def remove_excessive_whitespace(content):
 def should_ignore_folder(folder_path):
     return any(ignore_folder in folder_path for ignore_folder in IGNORE_FOLDERS)
 
-def concatenate_files(folder, patterns, verbose=False):
+def concatenate_files(folder, patterns, verbose=False, output_name=None):
     # Ensure out directory exists
     if not os.path.exists("out"):
         os.makedirs("out")
@@ -49,7 +49,10 @@ def concatenate_files(folder, patterns, verbose=False):
     folder_display = folder.replace("/", "_").replace(".", "_")
 
     # Create an appropriate output filename based on the pattern
-    output_filename = f"out/{folder_display}_concatenated_{patterns.replace('*', '-').replace('.', '_').replace(',', '_')}.txt"
+    if output_name:
+        output_filename = f"out/{output_name}.txt"
+    else:
+        output_filename = f"out/{folder_display}_concatenated_{patterns.replace('*', '-').replace('.', '_').replace(',', '_')}.txt"
 
     pattern_list = patterns.split(',')
 
@@ -94,9 +97,10 @@ def main():
     parser.add_argument('folder', type=str, help="Folder to search for files")
     parser.add_argument('patterns', type=str, help="Comma-separated list of file patterns to look for (e.g., *.txt,*.ts)")
     parser.add_argument('-v', '--verbose', action='store_true', help="Enable verbose output")
+    parser.add_argument('-n', '--name', type=str, help="Name of the output file (without extension)")
 
     args = parser.parse_args()
-    concatenate_files(args.folder, args.patterns, args.verbose)
+    concatenate_files(args.folder, args.patterns, args.verbose, args.name)
 
 if __name__ == "__main__":
     main()

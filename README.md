@@ -9,6 +9,7 @@
 - Adds a comment with the file name between each concatenated file.
 - Optionally removes unnecessary whitespace from specified file types.
 - Provides verbose output for detailed logging.
+- Allows specifying a custom name for the output file.
 
 ## Requirements
 
@@ -35,6 +36,22 @@ python3 combinator.py ../folder_name/ "*.ts,*.tsx"
 
 This command will include both `.ts` and `.tsx` files while excluding `.tsx.snap` files.
 
+### Specifying a Custom Output File Name
+
+To specify a custom name for the output file, use the `-n` or `--name` flag:
+
+```sh
+python3 combinator.py <folder> <patterns> -n <output_name>
+```
+
+Example:
+
+```sh
+python3 combinator.py ../folder_name/ "*.ts,*.tsx" -n concatenated_files
+```
+
+This command will create an output file named `concatenated_files.txt` in the `out` directory.
+
 ### Verbose Mode
 
 To enable verbose output, use the `-v` or `--verbose` flag:
@@ -51,7 +68,7 @@ python3 combinator.py ../folder_name/ "*.ts,*.tsx" -v
 
 ## Output
 
-The concatenated file will be created in the `out` directory with a name based on the input folder and patterns. The file will include:
+The concatenated file will be created in the `out` directory with a name based on the input folder and patterns or the specified custom name. The file will include:
 
 - A header indicating the folder and patterns.
 - The contents of each file, separated by a comment with the file name.
@@ -62,11 +79,11 @@ The concatenated file will be created in the `out` directory with a name based o
 
 This function processes the content to remove unnecessary whitespace and excessive line breaks.
 
-### `concatenate_files(folder, patterns, verbose=False)`
+### `concatenate_files(folder, patterns, verbose=False, output_name=None)`
 
 This function handles the main logic of concatenating files:
 - Ensures the `out` directory exists.
-- Generates an output file name based on the input folder and patterns.
+- Generates an output file name based on the input folder and patterns or the specified custom name.
 - Writes a header to the output file.
 - Recursively searches for files matching the specified patterns and concatenates their contents into the output file.
 - Optionally removes excessive whitespace for specified file extensions.
