@@ -16,12 +16,13 @@ IGNORE_FOLDERS = {
     ".vscode",       # Visual Studio Code project data
     "env",           # Another common Python virtual environment name
     "Pods",          # CocoaPods folder for iOS projects
-    "DerivedData",   # Xcode derived data
+    "DerivedData",   # Xcode derived data,
+    ".next",         # Next.js build output
     "bin", "obj"     # C#/C++ build output
 }
 
 # List of file extensions for which unnecessary whitespace should be removed
-REMOVE_WHITESPACE_EXTENSIONS = {".java", ".ts", ".tsx", ".js", ".jsx", ".c", ".cpp", ".cs", ".go", ".php"}
+REMOVE_WHITESPACE_EXTENSIONS = {".java", ".ts", ".tsx", ".js", ".jsx", ".json", ".c", ".cpp", ".cs", ".go", ".php"}
 
 def remove_excessive_whitespace(content):
     # Split the content into lines
