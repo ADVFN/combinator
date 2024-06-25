@@ -1,4 +1,4 @@
-# Combinator
+# ADVFN Combinator
 
 `combinator.py` is a Python script that concatenates all files with a specified extension from within a directory (recursively) into a single output file. It adds a comment with the file name between each concatenated file and can optionally remove unnecessary whitespace from `.java` files.
 
