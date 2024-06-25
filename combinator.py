@@ -1,10 +1,9 @@
 import argparse
 import os
-import glob
 import time
 
 # List of common library folders to ignore
-IGNORE_FOLDERS = [
+IGNORE_FOLDERS = {
     "node_modules",  # JavaScript/TypeScript
     "venv",          # Python virtual environment
     "__pycache__",   # Python bytecode cache
@@ -17,7 +16,7 @@ IGNORE_FOLDERS = [
     "Pods",          # CocoaPods folder for iOS projects
     "DerivedData",   # Xcode derived data
     "bin", "obj"     # C#/C++ build output
-]
+}
 
 def remove_excessive_line_breaks(content):
     # Split the content into lines
@@ -28,10 +27,7 @@ def remove_excessive_line_breaks(content):
     return "\n".join(cleaned_lines)
 
 def should_ignore_folder(folder_path):
-    for ignore_folder in IGNORE_FOLDERS:
-        if ignore_folder in folder_path:
-            return True
-    return False
+    return any(ignore_folder in folder_path for ignore_folder in IGNORE_FOLDERS)
 
 def concatenate_files(folder, extension, verbose=False):
     # Ensure .out directory exists
@@ -46,7 +42,7 @@ def concatenate_files(folder, extension, verbose=False):
     # Replace / and . in the folder name to avoid issues with the output filename
     folder_display = folder.replace("/", "_").replace(".", "_")
 
-    output_filename = f".out/{folder_display}_concatenated_{extension.strip('.')}.txt"
+    output_filename = f".out/{folder_display}_concatenated_{extension.lstrip('.')}.txt"
 
     try:
         with open(output_filename, 'w') as outfile:
